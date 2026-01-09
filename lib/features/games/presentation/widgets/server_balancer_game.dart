@@ -20,7 +20,7 @@ class _ServerBalancerGameState extends State<ServerBalancerGame> {
   int _stableTime = 0;
   Timer? _loadFluctuation;
   Timer? _scoreTimer;
-  List<ServerParticle> _particles = [];
+  final List<ServerParticle> _particles = [];
 
   @override
   void initState() {
@@ -166,7 +166,7 @@ class _ServerBalancerGameState extends State<ServerBalancerGame> {
                   boxShadow: [
                     BoxShadow(
                       color: (_isStable ? AppTheme.neonAccent : Colors.red)
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5),
                       blurRadius: 20,
                       spreadRadius: 2,
                     ),
@@ -225,7 +225,7 @@ class _ServerBalancerGameState extends State<ServerBalancerGame> {
                                 )
                                 .shimmer(
                                   duration: 2000.ms,
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                 ),
                       );
                     }),

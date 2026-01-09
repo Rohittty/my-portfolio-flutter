@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/core/widgets/responsive_layout.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
-import 'dart:ui'; // For ImageFilter
 
 class CodingProfile extends StatelessWidget {
   const CodingProfile({super.key});
@@ -169,12 +168,12 @@ class _AchievementRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: color, size: 16),
         ),
-        const Gap(16),
+        const Gap(16),                
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -208,7 +207,7 @@ class _GlassCard extends StatelessWidget {
       width: 400,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppTheme.cardSurface.withOpacity(0.5),
+        color: AppTheme.cardSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white10),
       ),

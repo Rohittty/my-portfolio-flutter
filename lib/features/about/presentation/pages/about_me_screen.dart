@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/core/constants/app_constants.dart';
 import 'package:my_portfolio/core/widgets/responsive_layout.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
@@ -38,7 +37,7 @@ class AboutMeScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: AppTheme.cardSurface.withOpacity(0.5),
+                      color: AppTheme.cardSurface.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Colors.white10),
                     ),

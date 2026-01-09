@@ -72,7 +72,7 @@ class _FooterSection extends StatelessWidget {
           ),
           const Gap(32),
           ElevatedButton(
-            onPressed: () {}, // TODO: Navigate to Contact
+            onPressed: () {}, 
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.neonAccent,
               foregroundColor: Colors.black,

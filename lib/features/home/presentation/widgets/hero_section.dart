@@ -71,7 +71,7 @@ class _HeroSectionState extends State<HeroSection>
               left: -100,
               top: 100,
               child: _AmbientGlow(
-                color: AppTheme.devOpsPrimary.withOpacity(0.15),
+                color: AppTheme.devOpsPrimary.withValues(alpha: 0.15),
                 radius: 300,
               ),
             ),
@@ -79,7 +79,7 @@ class _HeroSectionState extends State<HeroSection>
               right: -100,
               bottom: 100,
               child: _AmbientGlow(
-                color: AppTheme.flutterPrimary.withOpacity(0.15),
+                color: AppTheme.flutterPrimary.withValues(alpha: 0.15),
                 radius: 300,
               ),
             ),
@@ -132,14 +132,14 @@ class _HeroSectionState extends State<HeroSection>
                         vertical: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
+                        color: Colors.white.withValues(alpha: 0.05),
                         border: Border.all(
-                          color: AppTheme.neonAccent.withOpacity(0.5),
+                          color: AppTheme.neonAccent.withValues(alpha: 0.5),
                         ),
                         borderRadius: BorderRadius.circular(50),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.neonAccent.withOpacity(0.2),
+                            color: AppTheme.neonAccent.withValues(alpha: 0.2),
                             blurRadius: 20,
                           ),
                         ],
@@ -232,7 +232,7 @@ class _HeroSectionState extends State<HeroSection>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _PrimaryButton(
-                          onPressed: () {}, // TODO: Scroll to Projects
+                          onPressed: () {}, 
                           label: "View Work",
                           icon: Icons.arrow_downward_rounded,
                         ),
@@ -293,9 +293,9 @@ class _TechCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -303,7 +303,7 @@ class _TechCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 20),
@@ -420,10 +420,10 @@ class _SocialButton extends StatelessWidget {
       tooltip: tooltip,
       icon: Icon(icon, color: Colors.white70, size: 24),
       style: IconButton.styleFrom(
-        backgroundColor: Colors.white.withOpacity(0.05),
+        backgroundColor: Colors.white.withValues(alpha: 0.05),
         padding: const EdgeInsets.all(12),
         shape: const CircleBorder(),
-        side: BorderSide(color: Colors.white.withOpacity(0.1)),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
       ),
     );
   }
@@ -439,7 +439,7 @@ class _ArchitectGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.03)
+      ..color = Colors.white.withValues(alpha: 0.03)
       ..strokeWidth = 1;
 
     final spacing = 50.0;

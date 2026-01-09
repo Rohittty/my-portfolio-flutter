@@ -73,7 +73,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [color.withOpacity(0.2), Colors.transparent],
+                      colors: [color.withValues(alpha: 0.2), Colors.transparent],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -102,7 +102,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.2),
+                          color: Colors.green.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.greenAccent),
                         ),
@@ -212,7 +212,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       color: Colors.black26,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: color.withOpacity(0.3),
+                        color: color.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -225,7 +225,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                               Icon(
                                 Icons.image,
                                 size: 80,
-                                color: color.withOpacity(0.3),
+                                color: color.withValues(alpha: 0.3),
                               ),
                               const Gap(16),
                               Text(
@@ -380,9 +380,9 @@ class _MetricCard extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-        color: AppTheme.cardSurface.withOpacity(0.5),
+        color: AppTheme.cardSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -417,8 +417,8 @@ class _TechBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        border: Border.all(color: color.withOpacity(0.3)),
+        color: color.withValues(alpha: 0.1),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

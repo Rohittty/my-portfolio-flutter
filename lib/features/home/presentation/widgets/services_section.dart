@@ -134,7 +134,7 @@ class _ServiceCardState extends State<_ServiceCard> {
           padding: const EdgeInsets.all(32),
           decoration: BoxDecoration(
             color: _isHovered
-                ? widget.color.withOpacity(0.1)
+                ? widget.color.withValues(alpha: 0.1)
                 : AppTheme.cardSurface,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
@@ -144,7 +144,7 @@ class _ServiceCardState extends State<_ServiceCard> {
             boxShadow: [
               if (_isHovered)
                 BoxShadow(
-                  color: widget.color.withOpacity(0.2),
+                  color: widget.color.withValues(alpha: 0.2),
                   blurRadius: 32,
                   offset: const Offset(0, 16),
                 ),
@@ -156,7 +156,7 @@ class _ServiceCardState extends State<_ServiceCard> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: widget.color.withOpacity(0.1),
+                  color: widget.color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(widget.icon, size: 32, color: widget.color),
@@ -188,7 +188,7 @@ class _ServiceCardState extends State<_ServiceCard> {
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: widget.color.withOpacity(0.3),
+                            color: widget.color.withValues(alpha: 0.3),
                           ),
                           borderRadius: BorderRadius.circular(20),
                         ),

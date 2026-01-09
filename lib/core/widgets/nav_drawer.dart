@@ -105,7 +105,7 @@ class _NavItem extends StatelessWidget {
         Navigator.pop(context); // Close drawer
       },
       selected: isSelected,
-      selectedTileColor: AppTheme.neonAccent.withOpacity(0.1),
+      selectedTileColor: AppTheme.neonAccent.withValues(alpha: 0.1),
     );
   }
 }

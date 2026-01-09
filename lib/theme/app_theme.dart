@@ -33,8 +33,8 @@ class AppTheme {
         primary: devOpsPrimary,
         secondary: flutterPrimary,
         surface: cardSurface,
-        background: darkBackground,
-        onBackground: textPrimary,
+
+        onSurface: textPrimary,
       ),
       textTheme: TextTheme(
         displayLarge: GoogleFonts.outfit(

@@ -160,8 +160,8 @@ class _SkillCardState extends State<_SkillCard> {
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
           color: _isHovered
-              ? widget.color.withOpacity(0.05)
-              : AppTheme.cardSurface.withOpacity(0.5),
+              ? widget.color.withValues(alpha: 0.05)
+              : AppTheme.cardSurface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: _isHovered ? widget.color : Colors.white10,
@@ -170,7 +170,7 @@ class _SkillCardState extends State<_SkillCard> {
           boxShadow: [
             if (_isHovered)
               BoxShadow(
-                color: widget.color.withOpacity(0.1),
+                color: widget.color.withValues(alpha: 0.1),
                 blurRadius: 32,
                 spreadRadius: 2,
               ),
@@ -182,7 +182,7 @@ class _SkillCardState extends State<_SkillCard> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: widget.color.withOpacity(0.1),
+                color: widget.color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(widget.icon, color: widget.color, size: 28),
@@ -222,9 +222,9 @@ class _SkillPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
         skill,

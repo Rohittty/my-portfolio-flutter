@@ -16,8 +16,8 @@ class _BugSmasherGameState extends State<BugSmasherGame>
   int _score = 0;
   int _combo = 0;
   int _highScore = 0;
-  List<Bug> _bugs = [];
-  List<Particle> _particles = [];
+  final List<Bug> _bugs = [];
+  final List<Particle> _particles = [];
   Timer? _spawner;
   Timer? _comboTimer;
   int _spawnInterval = 800;
@@ -199,7 +199,7 @@ class _BugSmasherGameState extends State<BugSmasherGame>
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.red.withOpacity(0.5),
+                              color: Colors.red.withValues(alpha: 0.5),
                               blurRadius: 12,
                               spreadRadius: 2,
                             ),

@@ -33,10 +33,10 @@ class ContactScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.greenAccent.withOpacity(0.5)),
+                border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.greenAccent.withOpacity(0.1),
+                    color: Colors.greenAccent.withValues(alpha: 0.1),
                     blurRadius: 10,
                   ),
                 ],
@@ -65,7 +65,7 @@ class ContactScreen extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.greenAccent.withOpacity(0.1),
+                        backgroundColor: Colors.greenAccent.withValues(alpha: 0.1),
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
@@ -126,7 +126,7 @@ class _TerminalField extends StatelessWidget {
           cursorColor: Colors.greenAccent,
           decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white.withValues(alpha: 0.05),
             border: InputBorder.none,
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white10),

@@ -58,11 +58,11 @@ class _GameOverlayState extends State<GameOverlay> {
                           color: AppTheme.cardSurface,
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
-                            color: AppTheme.neonAccent.withOpacity(0.5),
+                            color: AppTheme.neonAccent.withValues(alpha: 0.5),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.neonAccent.withOpacity(0.2),
+                              color: AppTheme.neonAccent.withValues(alpha: 0.2),
                               blurRadius: 32,
                             ),
                           ],
@@ -88,7 +88,7 @@ class _GameOverlayState extends State<GameOverlay> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.red.withOpacity(0.5),
+                            color: Colors.red.withValues(alpha: 0.5),
                             blurRadius: 12,
                           ),
                         ],

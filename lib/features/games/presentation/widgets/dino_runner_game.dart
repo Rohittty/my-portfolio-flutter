@@ -37,8 +37,8 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
   final double _groundLevel = 0;
 
   // Entities
-  List<Obstacle> _obstacles = [];
-  List<Particle> _particles = [];
+  final List<Obstacle> _obstacles = [];
+  final List<Particle> _particles = [];
 
   // Loops
   late Ticker _ticker;

@@ -166,7 +166,7 @@ class _WorkflowCardState extends State<_WorkflowCard> {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: _isHovered
-              ? widget.color.withOpacity(0.1)
+              ? widget.color.withValues(alpha: 0.1)
               : AppTheme.cardSurface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -176,7 +176,7 @@ class _WorkflowCardState extends State<_WorkflowCard> {
           boxShadow: [
             if (_isHovered)
               BoxShadow(
-                color: widget.color.withOpacity(0.2),
+                color: widget.color.withValues(alpha: 0.2),
                 blurRadius: 20,
                 spreadRadius: 2,
               ),
@@ -187,7 +187,7 @@ class _WorkflowCardState extends State<_WorkflowCard> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: widget.color.withOpacity(0.1),
+                color: widget.color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(widget.icon, color: widget.color, size: 24),

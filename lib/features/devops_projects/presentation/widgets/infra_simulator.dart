@@ -175,7 +175,7 @@ class _NodeTarget extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isHovered
-                ? AppTheme.devOpsPrimary.withOpacity(0.1)
+                ? AppTheme.devOpsPrimary.withValues(alpha: 0.1)
                 : AppTheme.cardSurface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
