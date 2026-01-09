@@ -8,6 +8,7 @@ import 'package:my_portfolio/features/home/presentation/widgets/skills_showcase.
 import 'package:my_portfolio/features/home/presentation/widgets/live_metrics.dart';
 
 import 'package:my_portfolio/features/home/presentation/widgets/workflow_section.dart';
+import 'package:my_portfolio/features/home/presentation/widgets/mobile_simulator_background.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,20 +17,28 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            const RepaintBoundary(child: HeroSection()),
-            const RepaintBoundary(child: CodingProfile()),
-            const RepaintBoundary(child: WorkflowSection()),
-            const RepaintBoundary(child: FeaturedProjects()),
-            const RepaintBoundary(child: SkillsShowcase()),
+      body: Stack(
+        children: [
+          // Back Layer - Mobile Simulator
+          const MobileSimulatorBackground(),
 
-            // Final Call to Action
-            const RepaintBoundary(child: _FooterSection()),
-          ],
-        ),
+          // Front Layer - Content
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                const RepaintBoundary(child: HeroSection()),
+                const RepaintBoundary(child: CodingProfile()),
+                const RepaintBoundary(child: WorkflowSection()),
+                const RepaintBoundary(child: FeaturedProjects()),
+                const RepaintBoundary(child: SkillsShowcase()),
+
+                // Final Call to Action
+                const RepaintBoundary(child: _FooterSection()),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
