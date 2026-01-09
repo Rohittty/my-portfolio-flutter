@@ -14,22 +14,22 @@ class AppGallery extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         _TiltCard(
-          appName: "Fitness Pro",
-          description: "Health & Workout Tracker",
-          color: Colors.orangeAccent,
-          icon: Icons.fitness_center,
+          appName: "TaxHelpDesk",
+          description: "CA Services & Tools",
+          color: Colors.blueAccent,
+          icon: Icons.calculate,
         ),
         _TiltCard(
-          appName: "Crypto Wallet",
-          description: "Secure Digital Assets",
+          appName: "Isomeds",
+          description: "E-commerce Medicine",
+          color: Colors.greenAccent,
+          icon: Icons.medical_services,
+        ),
+        _TiltCard(
+          appName: "BBNIA",
+          description: "Resume Builder Platform",
           color: Colors.purpleAccent,
-          icon: Icons.account_balance_wallet,
-        ),
-        _TiltCard(
-          appName: "Travel Mate",
-          description: "Trip Planner & Guide",
-          color: Colors.tealAccent,
-          icon: Icons.map,
+          icon: Icons.description,
         ),
       ],
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/core/widgets/responsive_layout.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
 
@@ -11,18 +12,116 @@ class SkillsShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 32),
+      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Technical Arsenal",
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const Gap(32),
+            "TECHNICAL ARSENAL",
+            style: GoogleFonts.jetBrainsMono(
+              color: AppTheme.neonAccent,
+              fontSize: 14,
+              letterSpacing: 2,
+              fontWeight: FontWeight.bold,
+            ),
+          ).animate().fadeIn().slideX(begin: -0.1, end: 0),
+          const Gap(16),
+          Text(
+            "My Stack",
+            style: GoogleFonts.outfit(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ).animate().fadeIn(delay: 200.ms),
+          const Gap(40),
           const ResponsiveLayout(
-            mobileBody: _MobileSkills(),
-            desktopBody: _DesktopSkills(),
+            mobileBody: Column(
+              children: [
+                _SkillCard(
+                  title: "Programming",
+                  icon: FontAwesomeIcons.code,
+                  color: AppTheme.flutterPrimary,
+                  skills: [
+                    "Flutter",
+                    "Dart",
+                    "Firebase",
+                    "RESTful APIs",
+                    "C++",
+                    "Java",
+                    "Python",
+                    "SQL",
+                    "MongoDB",
+                    "Docker",
+                  ],
+                ),
+                Gap(24),
+                _SkillCard(
+                  title: "DevOps",
+                  icon: FontAwesomeIcons.infinity,
+                  color: AppTheme.devOpsPrimary,
+                  skills: ["AWS", "CI/CD Pipelines", "Git", "Postman"],
+                ),
+                Gap(24),
+                _SkillCard(
+                  title: "Professional Skills",
+                  icon: FontAwesomeIcons.userTie,
+                  color: Colors.amberAccent,
+                  skills: [
+                    "Agile Development",
+                    "Problem Solving",
+                    "Cloud Infrastructure",
+                    "Debugging",
+                    "Clean Code",
+                    "Automation",
+                    "Collaboration",
+                  ],
+                ),
+              ],
+            ),
+            desktopBody: Wrap(
+              spacing: 32,
+              runSpacing: 32,
+              children: [
+                _SkillCard(
+                  title: "Programming",
+                  icon: FontAwesomeIcons.code,
+                  color: AppTheme.flutterPrimary,
+                  skills: [
+                    "Flutter",
+                    "Dart",
+                    "Firebase",
+                    "RESTful APIs",
+                    "C++",
+                    "Java",
+                    "Python",
+                    "SQL",
+                    "MongoDB",
+                    "Docker",
+                  ],
+                ),
+                _SkillCard(
+                  title: "DevOps",
+                  icon: FontAwesomeIcons.infinity,
+                  color: AppTheme.devOpsPrimary,
+                  skills: ["AWS", "CI/CD Pipelines", "Git", "Postman"],
+                ),
+                _SkillCard(
+                  title: "Professional Skills",
+                  icon: FontAwesomeIcons.userTie,
+                  color: Colors.amberAccent,
+                  skills: [
+                    "Agile Development",
+                    "Problem Solving",
+                    "Cloud Infrastructure",
+                    "Debugging",
+                    "Clean Code",
+                    "Automation",
+                    "Collaboration",
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -30,182 +129,111 @@ class SkillsShowcase extends StatelessWidget {
   }
 }
 
-class _DesktopSkills extends StatelessWidget {
-  const _DesktopSkills();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: _SkillCategory(
-            title: "DevOps & Cloud",
-            color: AppTheme.devOpsPrimary,
-            skills: [
-              _Skill("Kubernetes", 0.9),
-              _Skill("AWS / Azure", 0.85),
-              _Skill("Terraform", 0.95),
-              _Skill("CI/CD (GitHub Actions)", 0.9),
-              _Skill("Docker", 0.95),
-            ],
-          ),
-        ),
-        const Gap(40),
-        Expanded(
-          child: _SkillCategory(
-            title: "Flutter & Mobile",
-            color: AppTheme.flutterPrimary,
-            skills: [
-              _Skill("Dart", 0.95),
-              _Skill("State Management (Riverpod)", 0.9),
-              _Skill("Bloc/Cubit", 0.85),
-              _Skill("Animations", 0.8),
-              _Skill("Clean Architecture", 0.9),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _MobileSkills extends StatelessWidget {
-  const _MobileSkills();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _SkillCategory(
-          title: "DevOps & Cloud",
-          color: AppTheme.devOpsPrimary,
-          skills: [
-            _Skill("Kubernetes", 0.9),
-            _Skill("AWS", 0.85),
-            _Skill("Terraform", 0.95),
-          ],
-        ),
-        const Gap(32),
-        _SkillCategory(
-          title: "Flutter & Mobile",
-          color: AppTheme.flutterPrimary,
-          skills: [
-            _Skill("Dart", 0.95),
-            _Skill("Riverpod", 0.9),
-            _Skill("Animations", 0.8),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _SkillCategory extends StatelessWidget {
+class _SkillCard extends StatefulWidget {
   final String title;
+  final IconData icon;
   final Color color;
-  final List<_Skill> skills;
+  final List<String> skills;
 
-  const _SkillCategory({
+  const _SkillCard({
     required this.title,
+    required this.icon,
     required this.color,
     required this.skills,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppTheme.cardSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(color: color),
-          ),
-          const Gap(24),
-          ...skills.map(
-            (s) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _SkillBar(skill: s, color: color),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  State<_SkillCard> createState() => _SkillCardState();
 }
 
-class _SkillBar extends StatelessWidget {
-  final _Skill skill;
-  final Color color;
-
-  const _SkillBar({required this.skill, required this.color});
+class _SkillCardState extends State<_SkillCard> {
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: 200.ms,
+        width: 350,
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: _isHovered
+              ? widget.color.withOpacity(0.05)
+              : AppTheme.cardSurface.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: _isHovered ? widget.color : Colors.white10,
+            width: _isHovered ? 2 : 1,
+          ),
+          boxShadow: [
+            if (_isHovered)
+              BoxShadow(
+                color: widget.color.withOpacity(0.1),
+                blurRadius: 32,
+                spreadRadius: 2,
+              ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(skill.name, style: Theme.of(context).textTheme.bodyLarge),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: widget.color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(widget.icon, color: widget.color, size: 28),
+            ),
+            const Gap(24),
             Text(
-              "${(skill.level * 100).toInt()}%",
-              style: Theme.of(context).textTheme.bodyMedium,
+              widget.title,
+              style: GoogleFonts.outfit(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const Gap(24),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: widget.skills
+                  .map((skill) => _SkillPill(skill: skill, color: widget.color))
+                  .toList(),
             ),
           ],
         ),
-        const Gap(8),
-        Container(
-          height: 8,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white10,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Align(
-                alignment: Alignment.centerLeft,
-                child:
-                    Container(
-                      height: 8,
-                      width: constraints.maxWidth * skill.level,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(4),
-                        boxShadow: [
-                          BoxShadow(
-                            color: color.withOpacity(0.5),
-                            blurRadius: 6,
-                          ),
-                        ],
-                      ),
-                    ).animate().scaleX(
-                      alignment: Alignment.centerLeft,
-                      duration: 1000.ms,
-                      curve: Curves.easeOutCubic,
-                    ),
-              );
-            },
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
 
-class _Skill {
-  final String name;
-  final double level;
-  _Skill(this.name, this.level);
+class _SkillPill extends StatelessWidget {
+  final String skill;
+  final Color color;
+
+  const _SkillPill({required this.skill, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Text(
+        skill,
+        style: GoogleFonts.inter(
+          color: Colors.white70,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
 }

@@ -1,0 +1,30 @@
+﻿Analyzing featured_projects.dart...                             
+
+   info - The import of 'package:flutter/services.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\features\home\presentation\widgets\featured_projects.dart:2:8 - unnecessary_import
+   info - The imported package 'flutter_animate' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:3:8 - depend_on_referenced_packages
+   info - The imported package 'font_awesome_flutter' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:4:8 - depend_on_referenced_packages
+   info - The imported package 'gap' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:5:8 - depend_on_referenced_packages
+   info - The imported package 'go_router' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:6:8 - depend_on_referenced_packages
+   info - Invalid use of a private type in a public API - lib\features\home\presentation\widgets\featured_projects.dart:172:9 - library_private_types_in_public_api
+   info - Constructors for public widgets should have a named 'key' parameter - lib\features\home\presentation\widgets\featured_projects.dart:176:9 - use_key_in_widget_constructors
+   info - Invalid use of a private type in a public API - lib\features\home\presentation\widgets\featured_projects.dart:177:19 - library_private_types_in_public_api
+   info - 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead - lib\features\home\presentation\widgets\featured_projects.dart:205:27 - deprecated_member_use
+   info - 'translate' is deprecated and shouldn't be used. Use translateByVector3, translateByVector4, or translateByDouble instead - lib\features\home\presentation\widgets\featured_projects.dart:206:27 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:214:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:215:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:217:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:224:59 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:225:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:231:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:238:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:239:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:261:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:262:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:317:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:320:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:351:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:369:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:370:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:374:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\widgets\featured_projects.dart:375:34 - deprecated_member_use
+

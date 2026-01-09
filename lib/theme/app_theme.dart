@@ -3,12 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Colors
-  static const Color devOpsPrimary = Color(0xFF00BFA5); // Teal for DevOps
-  static const Color flutterPrimary = Color(0xFF42A5F5); // Blue for Flutter
-  static const Color darkBackground = Color(0xFF1E1E1E);
-  static const Color darkerBackground = Color(0xFF121212);
-  static const Color cardSurface = Color(0xFF2C2C2C);
-  static const Color neonAccent = Color(0xFF69F0AE);
+  static const Color devOpsPrimary = Color(
+    0xFF00E5FF,
+  ); // Cyan/Teal for DevOps (Cyber)
+  static const Color flutterPrimary = Color(
+    0xFF2962FF,
+  ); // Deep Blue for Flutter (Mobile)
+  static const Color darkBackground = Color(0xFF0A0E12); // Slightly bluish dark
+  static const Color darkerBackground = Color(0xFF050709);
+  static const Color cardSurface = Color(0xFF141C24);
+  static const Color neonAccent = Color(
+    0xFF00FF9D,
+  ); // High viz green for accents
 
   static const Color textPrimary = Color(0xFFE0E0E0);
   static const Color textSecondary = Color(0xFFA0A0A0);

@@ -1,0 +1,9 @@
+﻿Analyzing featured_projects.dart...                             
+
+   info - The imported package 'flutter_animate' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:2:8 - depend_on_referenced_packages
+   info - The imported package 'font_awesome_flutter' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:3:8 - depend_on_referenced_packages
+   info - The imported package 'gap' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:4:8 - depend_on_referenced_packages
+   info - The imported package 'go_router' isn't a dependency of the importing package - lib\features\home\presentation\widgets\featured_projects.dart:5:8 - depend_on_referenced_packages
+   info - 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead - lib\features\home\presentation\widgets\featured_projects.dart:208:27 - deprecated_member_use
+   info - 'translate' is deprecated and shouldn't be used. Use translateByVector3, translateByVector4, or translateByDouble instead - lib\features\home\presentation\widgets\featured_projects.dart:209:27 - deprecated_member_use
+

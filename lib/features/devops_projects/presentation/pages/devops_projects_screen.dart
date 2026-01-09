@@ -80,24 +80,24 @@ class _DevOpsProjectsScreenState extends ConsumerState<DevOpsProjectsScreen> {
               runSpacing: 24,
               children: [
                 const DevOpsProjectCard(
-                  title: "K8s-Autoscaler",
-                  uptime: "99.99%",
-                  techStack: ["Go", "Kubernetes", "Prometheus"],
-                ),
-                const DevOpsProjectCard(
-                  title: "AWS-Terraform-Modules",
-                  uptime: "Stable",
-                  techStack: ["HCL", "AWS", "GitHub Actions"],
-                ),
-                const DevOpsProjectCard(
-                  title: "LogStream-Processor",
-                  uptime: "99.95%",
-                  techStack: ["Rust", "Kafka", "Elasticsearch"],
-                ),
-                const DevOpsProjectCard(
-                  title: "Microservices-Mesh",
+                  title: "CI/CD Pipeline Automation",
                   uptime: "99.9%",
-                  techStack: ["Istio", "Envoy", "Docker"],
+                  techStack: ["AWS DevOps", "GitHub Actions", "Docker"],
+                ),
+                const DevOpsProjectCard(
+                  title: "Cloud Infra Automation",
+                  uptime: "Stable",
+                  techStack: ["AWS", "Terraform", "CloudWatch"],
+                ),
+                const DevOpsProjectCard(
+                  title: "Container Orchestration",
+                  uptime: "99.95%",
+                  techStack: ["Docker", "Kubernetes", "EKS"],
+                ),
+                const DevOpsProjectCard(
+                  title: "Secure Cloud Ops",
+                  uptime: "Secured",
+                  techStack: ["IAM", "VPC", "WAF"],
                 ),
               ],
             ),

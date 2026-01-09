@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_portfolio/core/widgets/responsive_layout.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
-import 'dart:math' as math;
+import 'dart:ui'; // For ImageFilter
 
 class FeaturedProjects extends StatelessWidget {
   const FeaturedProjects({super.key});
@@ -11,58 +13,109 @@ class FeaturedProjects extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final projects = [
-      _ProjectData(
-        title: "CloudScale CI",
-        description: "Automated K8s scaling pipeline",
-        devOpsStats: "99.99% Uptime • Kubernetes",
-        flutterStats: "Admin Dashboard App • 4.8★",
-        icon: FontAwesomeIcons.cloud,
+      ProjectData(
+        title: "TaxHelpDesk",
+        description: "Mobile app for CA-related services & calculators.",
+        devOpsStats: "AWS • REST APIs",
+        flutterStats: "Appointment Booking • Calculators",
+        icon: FontAwesomeIcons.calculator,
+        tags: ["Flutter", "Firebase", "REST APIs", "AWS"],
       ),
-      _ProjectData(
-        title: "HealthTrack",
-        description: "HIPAA compliant monitoring",
-        devOpsStats: "AWS • Terraform • Docker",
-        flutterStats: "Patient App • Bluetooth",
-        icon: FontAwesomeIcons.heartPulse,
+      ProjectData(
+        title: "Isomeds",
+        description: "E-commerce app for purchasing medicines.",
+        devOpsStats: "Prescription Uploads",
+        flutterStats: "Cart Management • Home Delivery",
+        icon: FontAwesomeIcons.capsules,
+        tags: ["Flutter", "Dart", "Firebase", "E-commerce"],
       ),
-      _ProjectData(
-        title: "FinTech Flow",
-        description: "High-frequency trading interface",
-        devOpsStats: "Microservices • gRPC",
-        flutterStats: "Real-time Charts • WebSocket",
-        icon: FontAwesomeIcons.chartLine,
+      ProjectData(
+        title: "BBNIA",
+        description: "Resume building & hiring platform.",
+        devOpsStats: "Subscription Model",
+        flutterStats: "Resume Builder • Hiring Portal",
+        icon: FontAwesomeIcons.fileContract,
+        tags: ["Flutter", "REST APIs", "AWS", "Git"],
       ),
     ];
 
     return Padding(
-      padding: const EdgeInsets.all(32.0),
+      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Featured Projects",
-            style: Theme.of(context).textTheme.headlineMedium,
+                "Featured Projects",
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 600.ms)
+              .slideX(begin: -0.2, end: 0, curve: Curves.easeOut),
+          const Gap(8),
+          Container(
+            height: 4,
+            width: 60,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppTheme.devOpsPrimary, AppTheme.flutterPrimary],
+              ),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ).animate().scaleX(
+            duration: 800.ms,
+            alignment: Alignment.centerLeft,
+            curve: Curves.easeInOut,
           ),
-          const Gap(24),
+          const Gap(40),
           ResponsiveLayout(
             mobileBody: Column(
               children: projects
+                  .asMap()
+                  .entries
                   .map(
-                    (p) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: ProjectCard(data: p),
+                    (entry) => Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: ProjectCard(
+                        key: ValueKey(entry.value.title),
+                        data: entry.value,
+                        index: entry.key,
+                        onNavigate: () {
+                          final id = entry.value.title.toLowerCase().replaceAll(
+                            ' ',
+                            '-',
+                          );
+                          context.push('/project/devops-$id');
+                        },
+                      ),
                     ),
                   )
                   .toList(),
             ),
             tabletBody: Wrap(
-              spacing: 20,
-              runSpacing: 20,
+              spacing: 24,
+              runSpacing: 24,
+              alignment: WrapAlignment.center,
               children: projects
+                  .asMap()
+                  .entries
                   .map(
-                    (p) => SizedBox(
+                    (entry) => SizedBox(
                       width: (MediaQuery.of(context).size.width - 100) / 2,
-                      child: ProjectCard(data: p),
+                      child: ProjectCard(
+                        key: ValueKey(entry.value.title),
+                        data: entry.value,
+                        index: entry.key,
+                        onNavigate: () {
+                          final id = entry.value.title.toLowerCase().replaceAll(
+                            ' ',
+                            '-',
+                          );
+                          context.push('/project/devops-$id');
+                        },
+                      ),
                     ),
                   )
                   .toList(),
@@ -70,11 +123,23 @@ class FeaturedProjects extends StatelessWidget {
             desktopBody: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: projects
+                  .asMap()
+                  .entries
                   .map(
-                    (p) => Expanded(
+                    (entry) => Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ProjectCard(data: p),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: ProjectCard(
+                          key: ValueKey(entry.value.title),
+                          data: entry.value,
+                          index: entry.key,
+                          onNavigate: () {
+                            final id = entry.value.title
+                                .toLowerCase()
+                                .replaceAll(' ', '-');
+                            context.push('/project/devops-$id');
+                          },
+                        ),
                       ),
                     ),
                   )
@@ -87,151 +152,268 @@ class FeaturedProjects extends StatelessWidget {
   }
 }
 
-class _ProjectData {
+class ProjectData {
   final String title;
   final String description;
   final String devOpsStats;
   final String flutterStats;
   final IconData icon;
+  final List<String> tags;
 
-  _ProjectData({
+  ProjectData({
     required this.title,
     required this.description,
     required this.devOpsStats,
     required this.flutterStats,
     required this.icon,
+    required this.tags,
   });
 }
 
 class ProjectCard extends StatefulWidget {
-  final _ProjectData data;
-  const ProjectCard({required this.data});
+  final ProjectData data;
+  final VoidCallback onNavigate;
+  final int index;
+
+  const ProjectCard({
+    required this.data,
+    required this.onNavigate,
+    required this.index,
+    super.key,
+  });
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
 }
 
-class _ProjectCardState extends State<ProjectCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  bool _isFront = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _flipCard() {
-    if (_isFront) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-    _isFront = !_isFront;
-  }
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _flipCard,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            final angle = _animation.value * math.pi;
-            final isFrontVisible = angle < math.pi / 2;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
-            return Transform(
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateY(angle),
-              alignment: Alignment.center,
-              child: isFrontVisible
-                  ? _buildFront()
-                  : Transform(
-                      transform: Matrix4.identity()..rotateY(math.pi),
-                      alignment: Alignment.center,
-                      child: _buildBack(),
+    return MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: widget.onNavigate,
+            child:
+                AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOutCubic,
+                      transform: Matrix4.identity()
+                        ..scale(_isHovered ? 1.05 : 1.0)
+                        ..translate(0.0, _isHovered ? -10.0 : 0.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            isDark
+                                ? const Color(0xFF1E1E2E).withValues(alpha: 0.8)
+                                : Colors.white.withValues(alpha: 0.9),
+                            isDark
+                                ? const Color(0xFF2A2A40).withValues(alpha: 0.9)
+                                : Colors.grey.shade100,
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: _isHovered
+                                ? AppTheme.flutterPrimary.withValues(alpha: 0.3)
+                                : Colors.black.withValues(alpha: 0.1),
+                            blurRadius: _isHovered ? 20 : 10,
+                            offset: Offset(0, _isHovered ? 10 : 5),
+                          ),
+                          if (_isHovered)
+                            BoxShadow(
+                              color: AppTheme.devOpsPrimary.withValues(
+                                alpha: 0.2,
+                              ),
+                              blurRadius: 30,
+                              offset: const Offset(5, 5),
+                            ),
+                        ],
+                        border: Border.all(
+                          color: _isHovered
+                              ? AppTheme.flutterPrimary.withValues(alpha: 0.5)
+                              : Colors.white.withValues(alpha: 0.1),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: isDark
+                                            ? Colors.white.withValues(
+                                                alpha: 0.05,
+                                              )
+                                            : Colors.black.withValues(
+                                                alpha: 0.05,
+                                              ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Icon(
+                                        widget.data.icon,
+                                        size: 28,
+                                        color: _isHovered
+                                            ? AppTheme.flutterPrimary
+                                            : (isDark
+                                                  ? Colors.white70
+                                                  : Colors.black87),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_outward_rounded,
+                                      color: _isHovered
+                                          ? AppTheme.devOpsPrimary
+                                          : Colors.grey.shade400,
+                                    ),
+                                  ],
+                                ),
+                                const Gap(20),
+                                Text(
+                                  widget.data.title,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: _isHovered
+                                        ? (isDark ? Colors.white : Colors.black)
+                                        : (isDark
+                                              ? Colors.white70
+                                              : Colors.black87),
+                                  ),
+                                ),
+                                const Gap(8),
+                                Text(
+                                  widget.data.description,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: isDark
+                                        ? Colors.grey.shade400
+                                        : Colors.grey.shade600,
+                                  ),
+                                ),
+                                const Gap(20),
+                                _buildTechStack(isDark),
+                                const Gap(20),
+                                AnimatedSize(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                  child: _isHovered
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Divider(
+                                              color: isDark
+                                                  ? Colors.white.withValues(
+                                                      alpha: 0.1,
+                                                    )
+                                                  : Colors.black.withValues(
+                                                      alpha: 0.1,
+                                                    ),
+                                            ),
+                                            const Gap(12),
+                                            _buildStatRow(
+                                              FontAwesomeIcons.server,
+                                              widget.data.devOpsStats,
+                                              AppTheme.devOpsPrimary,
+                                              isDark,
+                                            ),
+                                            const Gap(8),
+                                            _buildStatRow(
+                                              FontAwesomeIcons.mobileButton,
+                                              widget.data.flutterStats,
+                                              AppTheme.flutterPrimary,
+                                              isDark,
+                                            ),
+                                          ],
+                                        )
+                                      : const SizedBox.shrink(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .animate(target: _isHovered ? 1 : 0)
+                    .shimmer(
+                      duration: 1200.ms,
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
-            );
-          },
+          ),
+        )
+        .animate()
+        .fadeIn(duration: 600.ms, delay: (widget.index * 200).ms)
+        .slideY(begin: 0.2, end: 0, curve: Curves.easeOut);
+  }
+
+  Widget _buildTechStack(bool isDark) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: widget.data.tags.map((tag) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.05)
+                : Colors.black.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.1),
+            ),
+          ),
+          child: Text(
+            tag,
+            style: TextStyle(
+              fontSize: 12,
+              color: isDark ? Colors.white70 : Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildStatRow(IconData icon, String text, Color color, bool isDark) {
+    return Row(
+      children: [
+        Icon(icon, size: 14, color: color),
+        const Gap(8),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark ? Colors.grey.shade300 : Colors.grey.shade700,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildFront() {
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        color: AppTheme.cardSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.devOpsPrimary.withOpacity(0.3)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(widget.data.icon, size: 48, color: AppTheme.devOpsPrimary),
-          const Gap(16),
-          Text(
-            widget.data.title,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const Gap(8),
-          Text(
-            widget.data.devOpsStats,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const Gap(16),
-          const Chip(label: Text("View DevOps Architecture")),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBack() {
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        color: AppTheme.darkBackground,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.flutterPrimary.withOpacity(0.3)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            FontAwesomeIcons.mobile,
-            size: 48,
-            color: AppTheme.flutterPrimary,
-          ),
-          const Gap(16),
-          Text(
-            widget.data.title,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const Gap(8),
-          Text(
-            widget.data.flutterStats,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const Gap(16),
-          const Chip(label: Text("See App Screens")),
-        ],
-      ),
+      ],
     );
   }
 }

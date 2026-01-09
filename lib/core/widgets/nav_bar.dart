@@ -64,13 +64,7 @@ class FloatingNavBar extends StatelessWidget {
                           route: AppConstants.routeHybrid,
                         ),
                         const SizedBox(width: 8),
-                        // New Blog Route
-                        _NavBarItem(
-                          icon: FontAwesomeIcons.featherPointed,
-                          label: "Blogs",
-                          route: '/blogs',
-                        ),
-                        const SizedBox(width: 8),
+
                         _NavBarItem(
                           icon: Icons.person_rounded,
                           label: "About",

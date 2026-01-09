@@ -26,7 +26,6 @@ class AppConstants {
   static const String routeHybrid = '/hybrid';
   static const String routeAbout = '/about';
   static const String routeContact = '/contact';
-  static const String routeBlog = '/blogs';
 
   // Feature Flags
   static const bool enableKonamiCode = true;

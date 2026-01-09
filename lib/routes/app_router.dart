@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_portfolio/core/constants/app_constants.dart';
-import 'package:my_portfolio/core/widgets/nav_bar.dart';
-import 'package:my_portfolio/theme/app_theme.dart';
+import 'package:my_portfolio/core/widgets/main_layout.dart';
 import 'package:my_portfolio/features/home/presentation/pages/home_screen.dart';
 import 'package:my_portfolio/features/devops_projects/presentation/pages/devops_projects_screen.dart';
 import 'package:my_portfolio/features/flutter_showcase/presentation/pages/flutter_showcase_screen.dart';
 import 'package:my_portfolio/features/hybrid_projects/presentation/pages/hybrid_projects_screen.dart';
 import 'package:my_portfolio/features/about/presentation/pages/about_me_screen.dart';
 import 'package:my_portfolio/features/contact/presentation/pages/contact_screen.dart';
-import 'package:my_portfolio/features/blog/presentation/pages/blog_screen.dart';
+import 'package:my_portfolio/features/devops_projects/presentation/pages/project_detail_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
@@ -17,10 +15,7 @@ class AppRouter {
     routes: [
       ShellRoute(
         builder: (context, state, child) {
-          return Scaffold(
-            backgroundColor: AppTheme.darkBackground,
-            body: Stack(children: [child, const FloatingNavBar()]),
-          );
+          return MainLayout(child: child);
         },
         routes: [
           GoRoute(
@@ -47,10 +42,14 @@ class AppRouter {
             path: AppConstants.routeContact,
             builder: (context, state) => const ContactScreen(),
           ),
-          // Blog Route
+
+          // Stacked Routes (Hide Shell if needed, or keep it)
           GoRoute(
-            path: AppConstants.routeBlog,
-            builder: (context, state) => const BlogScreen(),
+            path: '/project/:id',
+            builder: (context, state) {
+              final id = state.pathParameters['id'] ?? '';
+              return ProjectDetailScreen(projectId: id);
+            },
           ),
         ],
       ),
