@@ -416,7 +416,7 @@ class _SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {}, // TODO: Link
+      onPressed: () {}, 
       tooltip: tooltip,
       icon: Icon(icon, color: Colors.white70, size: 24),
       style: IconButton.styleFrom(

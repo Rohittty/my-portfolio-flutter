@@ -87,5 +87,4 @@ class AppTheme {
     );
   }
 
-  // TODO: Implement toggle for NightOps
 }

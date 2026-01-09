@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                 const RepaintBoundary(child: SkillsShowcase()),
 
                 // Final Call to Action
-                const RepaintBoundary(child: _FooterSection()),
+                const RepaintBoundary(child: _CTASection()),
               ],
             ),
           ),
@@ -44,8 +44,8 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _FooterSection extends StatelessWidget {
-  const _FooterSection();
+class _CTASection extends StatelessWidget {
+  const _CTASection();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _FooterSection extends StatelessWidget {
           ),
           const Gap(32),
           ElevatedButton(
-            onPressed: () {}, 
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.neonAccent,
               foregroundColor: Colors.black,
@@ -85,18 +85,143 @@ class _FooterSection extends StatelessWidget {
             child: const Text("INITIALIZE_CONTACT()"),
           ),
           const Gap(64),
+          const _FooterSection(),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterSection extends StatelessWidget {
+  const _FooterSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            AppTheme.neonAccent.withValues(alpha: 0.05),
+          ],
+        ),
+        border: Border(
+          top: BorderSide(color: AppTheme.neonAccent.withValues(alpha: 0.2)),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Social Links
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _SocialButton(icon: Icons.code, label: "GitHub", onTap: () {}),
+              const Gap(16),
+              _SocialButton(icon: Icons.work, label: "LinkedIn", onTap: () {}),
+              const Gap(16),
+              _SocialButton(icon: Icons.email, label: "Email", onTap: () {}),
+            ],
+          ),
+          const Gap(32),
+          // Copyright
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "© 2026 Rohit Adwani. Built with ",
-                style: TextStyle(color: Colors.white38),
+                "© 2026 Rohit Adwani • Built with ",
+                style: GoogleFonts.jetBrainsMono(
+                  color: Colors.white38,
+                  fontSize: 14,
+                ),
               ),
-              Icon(Icons.favorite, size: 14, color: Colors.blueAccent),
-              Text(" Flutter", style: TextStyle(color: Colors.white38)),
+              const Icon(Icons.favorite, size: 16, color: Colors.redAccent),
+              Text(
+                " & Flutter",
+                style: GoogleFonts.jetBrainsMono(
+                  color: Colors.white38,
+                  fontSize: 14,
+                ),
+              ),
             ],
           ),
+          const Gap(16),
+          Text(
+            "Crafted for Performance • Designed for Impact",
+            style: GoogleFonts.inter(
+              color: AppTheme.neonAccent.withValues(alpha: 0.5),
+              fontSize: 12,
+              letterSpacing: 1.5,
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _SocialButton extends StatefulWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _SocialButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  State<_SocialButton> createState() => _SocialButtonState();
+}
+
+class _SocialButtonState extends State<_SocialButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: _isHovered
+                ? AppTheme.neonAccent.withValues(alpha: 0.1)
+                : Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _isHovered
+                  ? AppTheme.neonAccent
+                  : Colors.white.withValues(alpha: 0.1),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                widget.icon,
+                color: _isHovered ? AppTheme.neonAccent : Colors.white70,
+                size: 20,
+              ),
+              const Gap(8),
+              Text(
+                widget.label,
+                style: GoogleFonts.inter(
+                  color: _isHovered ? AppTheme.neonAccent : Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
