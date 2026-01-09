@@ -26,7 +26,7 @@ class MainLayout extends StatelessWidget {
               elevation: 0,
               centerTitle: true,
               title: Text(
-                'ROHIT ADWANI',
+                'ROHIT ADVANI',
                 style: GoogleFonts.outfit(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
