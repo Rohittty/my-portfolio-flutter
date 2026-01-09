@@ -81,9 +81,10 @@ class WorkflowSection extends StatelessWidget {
                 ),
               ],
             ),
-            desktopBody: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            desktopBody: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 32,
+              runSpacing: 32,
               children: [
                 _WorkflowCard(
                   step: "01",
@@ -92,7 +93,6 @@ class WorkflowSection extends StatelessWidget {
                   description: "Writing clean, scalable\nDart & backend logic.",
                   color: AppTheme.flutterPrimary,
                 ),
-                _Connector(),
                 _WorkflowCard(
                   step: "02",
                   title: "Build",
@@ -100,7 +100,6 @@ class WorkflowSection extends StatelessWidget {
                   description: "Dockerizing apps &\nservices for consistency.",
                   color: Colors.orangeAccent,
                 ),
-                _Connector(),
                 _WorkflowCard(
                   step: "03",
                   title: "Test",
@@ -109,7 +108,6 @@ class WorkflowSection extends StatelessWidget {
                       "Automated unit, widget,\nand integration tests.",
                   color: Colors.purpleAccent,
                 ),
-                _Connector(),
                 _WorkflowCard(
                   step: "04",
                   title: "Deploy",
@@ -118,7 +116,6 @@ class WorkflowSection extends StatelessWidget {
                       "CI/CD pipelines to AWS,\nPlay Store & App Store.",
                   color: AppTheme.devOpsPrimary,
                 ),
-                _Connector(),
                 _WorkflowCard(
                   step: "05",
                   title: "Monitor",

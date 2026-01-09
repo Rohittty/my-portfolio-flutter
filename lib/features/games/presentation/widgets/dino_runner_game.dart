@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -18,26 +21,53 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
   bool _isGameOver = false;
   int _score = 0;
   int _highScore = 0;
+  double _difficultyMultiplier = 1.0;
 
   // Player state
   double _playerY = 0;
   double _playerVelocity = 0;
   bool _isJumping = false;
 
+  // Visual Effects
+  double _shakeOffset = 0;
+
   // Game physics
-  final double _gravity = 0.8;
-  final double _jumpPower = -15;
+  final double _gravity = 1.2;
+  final double _jumpPower = -18;
   final double _groundLevel = 0;
 
-  // Obstacles
+  // Entities
   List<Obstacle> _obstacles = [];
-  Timer? _gameLoop;
+  List<Particle> _particles = [];
+
+  // Loops
+  late Ticker _ticker;
   Timer? _obstacleSpawner;
-  double _gameSpeed = 5;
+  double _gameSpeed = 6;
+  double _gridOffset = 0;
 
   @override
   void initState() {
     super.initState();
+    _loadHighScore();
+    _ticker = createTicker(_onTick);
+  }
+
+  Future<void> _loadHighScore() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _highScore = prefs.getInt('cyberpunk_runner_highscore') ?? 0;
+    });
+  }
+
+  Future<void> _saveHighScore() async {
+    if (_score > _highScore) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('cyberpunk_runner_highscore', _score);
+      setState(() {
+        _highScore = _score;
+      });
+    }
   }
 
   void _startGame() {
@@ -48,27 +78,42 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
       _playerY = _groundLevel;
       _playerVelocity = 0;
       _obstacles.clear();
-      _gameSpeed = 5;
+      _particles.clear();
+      _gameSpeed = 7;
+      _difficultyMultiplier = 1.0;
+      _shakeOffset = 0;
     });
 
-    // Game loop - 60 FPS
-    _gameLoop = Timer.periodic(const Duration(milliseconds: 16), (timer) {
-      _updateGame();
-    });
+    _ticker.start();
 
-    // Spawn obstacles
-    _obstacleSpawner = Timer.periodic(const Duration(milliseconds: 1500), (
+    _obstacleSpawner?.cancel();
+    _obstacleSpawner = Timer.periodic(const Duration(milliseconds: 1200), (
       timer,
     ) {
       _spawnObstacle();
     });
   }
 
-  void _updateGame() {
+  void _onTick(Duration elapsed) {
     if (!_isGameRunning || _isGameOver) return;
 
+    // Calculate delta time in seconds (capped to prevent huge jumps on lag)
+    // For simplicity in this style of game, we can mostly assume fixed step or just run updates per frame.
+    // However, to be "smooth" regardless of frame rate, using delta time is best.
+    // For now, let's keep logic simple: 1 tick = 1 update frame.
+    // Ticker runs at screen refresh rate (60hz or 120hz).
+    // We'll normalize to roughly 60fps target speed.
+
+    _updateGame();
+  }
+
+  void _updateGame() {
     setState(() {
-      // Update player physics
+      // 1. Difficulty Scaling
+      _difficultyMultiplier += 0.0003; // Slightly slower ramp up for fairness
+      _gameSpeed = 7 * _difficultyMultiplier;
+
+      // 2. Physics & Player
       if (_isJumping || _playerY < _groundLevel) {
         _playerVelocity += _gravity;
         _playerY += _playerVelocity;
@@ -77,15 +122,19 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
           _playerY = _groundLevel;
           _playerVelocity = 0;
           _isJumping = false;
+          _spawnLandingParticles();
         }
       }
 
-      // Update obstacles
+      // Background Grid Scroll
+      _gridOffset -= _gameSpeed * 0.5;
+      if (_gridOffset <= -40) _gridOffset = 0;
+
+      // 3. Update Entities
+      // Obstacles
       for (var obstacle in _obstacles) {
         obstacle.x -= _gameSpeed;
       }
-
-      // Remove off-screen obstacles and increase score
       _obstacles.removeWhere((obstacle) {
         if (obstacle.x < -100) {
           _score += 10;
@@ -94,17 +143,52 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
         return false;
       });
 
-      // Check collisions
+      // Particles
+      for (var particle in _particles) {
+        particle.update();
+      }
+      _particles.removeWhere((p) => p.life <= 0);
+
+      // Trail Particles (Run Effect)
+      if (_playerY == _groundLevel && _score % 5 == 0) {
+        _particles.add(
+          Particle(
+            x: 100,
+            y: 50, // Foot level
+            color: Colors.cyanAccent.withValues(alpha: 0.5),
+            vx: -_gameSpeed * 0.8,
+            vy: (Random().nextDouble() - 0.5) * 2,
+            size: 3,
+          ),
+        );
+      }
+
+      // 4. Collision
+      // Player hitbox (somewhat smaller than visual for forgiveness)
+      Rect playerRect = Rect.fromLTWH(
+        100 + 15,
+        200 - 50 - _playerY + 10,
+        10,
+        30,
+      );
+
       for (var obstacle in _obstacles) {
-        if (_checkCollision(obstacle)) {
+        // Adjust hitbox based on obstacle type
+        // Flying drones are higher up
+        double obstacleBottom = obstacle.isFlying
+            ? 200 - obstacle.height - 40
+            : 200 - obstacle.height;
+        Rect obstacleRect = Rect.fromLTWH(
+          obstacle.x + 5,
+          obstacleBottom + 5,
+          30,
+          obstacle.height - 10,
+        );
+
+        if (playerRect.overlaps(obstacleRect)) {
           _gameOver();
           return;
         }
-      }
-
-      // Increase difficulty
-      if (_score % 100 == 0 && _score > 0) {
-        _gameSpeed = min(_gameSpeed + 0.5, 12);
       }
     });
   }
@@ -112,34 +196,54 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
   void _spawnObstacle() {
     if (!_isGameRunning || _isGameOver) return;
 
+    // Spawn rate decreases as difficulty increases (harder = more obstacles)
+    int spawnRate = max(500, (1400 - (_difficultyMultiplier * 600)).round());
+    _obstacleSpawner?.cancel();
+    _obstacleSpawner = Timer.periodic(
+      Duration(milliseconds: spawnRate),
+      (timer) => _spawnObstacle(),
+    );
+
     final random = Random();
-    final type = random.nextInt(3); // 0: cactus, 1: bird, 2: double cactus
+    int type = random.nextInt(4); // 0, 1, 2, 3
+
+    // Introduce flying obstacles only after some score/difficulty
+    bool isFlying = false;
+    if (_score > 300 && random.nextBool()) {
+      isFlying = true;
+      type = 3; // Drone type
+    }
 
     setState(() {
       _obstacles.add(
-        Obstacle(x: 800, type: type, height: type == 1 ? 40.0 : 50.0),
+        Obstacle(
+          x: 900,
+          type: type,
+          height: isFlying
+              ? 30.0
+              : (type == 1 ? 50.0 : 40.0 + random.nextInt(20)),
+          width: isFlying ? 40 : 40,
+          isFlying: isFlying,
+        ),
       );
     });
   }
 
-  bool _checkCollision(Obstacle obstacle) {
-    const playerX = 100.0;
-    const playerWidth = 40.0;
-    const playerHeight = 50.0;
+  // ... (Particles and Jump methods remain same)
 
-    final playerBottom = _playerY + playerHeight;
-    final obstacleLeft = obstacle.x;
-    final obstacleRight = obstacle.x + 40;
-    final obstacleTop = obstacle.type == 1 ? -80.0 : 0.0; // Bird flies higher
-
-    // Simple box collision
-    if (playerX + playerWidth > obstacleLeft &&
-        playerX < obstacleRight &&
-        playerBottom > obstacleTop) {
-      return true;
+  void _spawnLandingParticles() {
+    for (int i = 0; i < 10; i++) {
+      _particles.add(
+        Particle(
+          x: 110 + (Random().nextDouble() * 20),
+          y: 0,
+          color: Colors.white,
+          vx: (Random().nextDouble() - 0.5) * 10,
+          vy: -Random().nextDouble() * 5,
+          size: 4,
+        ),
+      );
     }
-
-    return false;
   }
 
   void _jump() {
@@ -157,236 +261,383 @@ class _DinoRunnerGameState extends State<DinoRunnerGame>
       setState(() {
         _isJumping = true;
         _playerVelocity = _jumpPower;
+
+        for (int i = 0; i < 5; i++) {
+          _particles.add(
+            Particle(
+              x: 120,
+              y: 10,
+              color: Colors.cyanAccent,
+              vx: -_gameSpeed,
+              vy: 2 + Random().nextDouble() * 2,
+              size: 3,
+            ),
+          );
+        }
       });
     }
   }
 
+  // ... (GameOver and Dispose remain same)
+
   void _gameOver() {
+    _saveHighScore();
     setState(() {
       _isGameOver = true;
       _isGameRunning = false;
-      if (_score > _highScore) {
-        _highScore = _score;
-      }
+      _shakeOffset = 10;
     });
 
-    _gameLoop?.cancel();
+    _ticker.stop();
     _obstacleSpawner?.cancel();
+
+    Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      if (!mounted || _shakeOffset <= 0) {
+        timer.cancel();
+        setState(() => _shakeOffset = 0);
+      } else {
+        setState(() => _shakeOffset = -_shakeOffset * 0.8);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _gameLoop?.cancel();
+    _ticker.dispose();
     _obstacleSpawner?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      autofocus: true,
-      onKeyEvent: (node, event) {
-        if (event is KeyDownEvent &&
-            event.logicalKey == LogicalKeyboardKey.space) {
-          _jump();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      },
-      child: GestureDetector(
-        onTap: _jump,
-        child: Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              // Score
-              Positioned(
-                top: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "HI: ${_highScore.toString().padLeft(5, '0')}",
-                      style: GoogleFonts.jetBrainsMono(
-                        color: Colors.white54,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      _score.toString().padLeft(5, '0'),
-                      style: GoogleFonts.jetBrainsMono(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+    return RepaintBoundary(
+      child: Focus(
+        autofocus: true,
+        onKeyEvent: (node, event) {
+          // ... (Key handling)
+          if (event is KeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.space) {
+            _jump();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: GestureDetector(
+          onTap: _jump,
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF0F0F1A),
+              border: Border.all(
+                color: Colors.cyanAccent.withValues(alpha: 0.3),
               ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.cyanAccent.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                children: [
+                  // ... (Background Grid - OptimizedGridPainter)
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: OptimizedGridPainter(offset: _gridOffset),
+                    ),
+                  ),
 
-              // Game area
-              Positioned.fill(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final groundY = constraints.maxHeight * 0.7;
-
-                    return Stack(
-                      children: [
-                        // Ground line
-                        Positioned(
-                          bottom: constraints.maxHeight * 0.3,
-                          left: 0,
-                          right: 0,
-                          child: Container(height: 2, color: Colors.white30),
-                        ),
-
-                        // Player (Flutter logo as dino)
-                        Positioned(
-                          left: 100,
-                          bottom: constraints.maxHeight * 0.3 - _playerY,
-                          child: _buildPlayer(),
-                        ),
-
-                        // Obstacles
-                        ..._obstacles.map((obstacle) {
-                          return Positioned(
-                            left: obstacle.x,
-                            bottom: obstacle.type == 1
-                                ? constraints.maxHeight * 0.3 + 80
-                                : constraints.maxHeight * 0.3,
-                            child: _buildObstacle(obstacle),
-                          );
-                        }),
-
-                        // Start/Game Over screen
-                        if (!_isGameRunning || _isGameOver)
-                          Positioned.fill(
-                            child: Container(
-                              color: Colors.black54,
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      _isGameOver
-                                          ? Icons.error_outline
-                                          : Icons.play_circle_outline,
-                                      size: 80,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      _isGameOver
-                                          ? "GAME OVER!"
-                                          : "FLUTTER RUNNER",
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 48,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    if (_isGameOver)
-                                      Text(
-                                        "Score: $_score",
-                                        style: GoogleFonts.jetBrainsMono(
-                                          fontSize: 24,
-                                          color: Colors.white70,
-                                        ),
-                                      ),
-                                    const SizedBox(height: 30),
-                                    Text(
-                                      "Tap or SPACE to ${_isGameOver ? 'Restart' : 'Start'}",
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        color: Colors.white70,
-                                      ),
+                  // 2. Game World with Shake
+                  Transform.translate(
+                    offset: Offset(_shakeOffset, 0),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Stack(
+                          children: [
+                            // Ground
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              height: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.cyanAccent,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.cyanAccent,
+                                      blurRadius: 10,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ),
-                      ],
-                    );
-                  },
-                ),
-              ),
 
-              // Instructions
-              if (_isGameRunning && !_isGameOver)
-                Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: Text(
-                    "🎮 Tap or SPACE to Jump",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
-                      color: Colors.white54,
-                      fontSize: 14,
+                            // Particles
+                            ..._particles.map(
+                              (p) => Positioned(
+                                left: p.x,
+                                bottom:
+                                    100 + p.y + (constraints.maxHeight * 0.2),
+                                child: Container(
+                                  width: p.size,
+                                  height: p.size,
+                                  decoration: BoxDecoration(
+                                    color: p.color.withValues(alpha: p.life),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // Player
+                            Positioned(
+                              left: 100,
+                              bottom:
+                                  100 +
+                                  _playerY +
+                                  (constraints.maxHeight * 0.2),
+                              child: _buildPlayer(),
+                            ),
+
+                            // Obstacles
+                            ..._obstacles.map((obstacle) {
+                              // Dynamic positioning for flying obstacles
+                              double bottomPos =
+                                  100 + (constraints.maxHeight * 0.2);
+                              if (obstacle.isFlying) {
+                                bottomPos += 40; // Fly above ground
+                              }
+
+                              return Positioned(
+                                left: obstacle.x,
+                                bottom: bottomPos,
+                                child: _buildObstacle(obstacle),
+                              );
+                            }),
+                          ],
+                        );
+                      },
                     ),
                   ),
-                ),
-            ],
+
+                  // ... (HUD and Game Over Overlay)
+                  // Keeping existing HUD code
+                  Positioned(
+                    top: 24,
+                    left: 24,
+                    right: 24,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "SCORE",
+                              style: GoogleFonts.orbitron(
+                                color: Colors.cyanAccent,
+                                fontSize: 12,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            Text(
+                              _score.toString().padLeft(6, '0'),
+                              style: GoogleFonts.orbitron(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "HIGH SCORE",
+                              style: GoogleFonts.orbitron(
+                                color: Colors.pinkAccent,
+                                fontSize: 12,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            Text(
+                              _highScore.toString().padLeft(6, '0'),
+                              style: GoogleFonts.orbitron(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Game Over Overlay
+                  if (!_isGameRunning || _isGameOver)
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.7),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                    _isGameOver
+                                        ? "SYSTEM FAILURE"
+                                        : "CYBER RUNNER",
+                                    style: GoogleFonts.orbitron(
+                                      fontSize: _isGameOver ? 42 : 36,
+                                      fontWeight: FontWeight.bold,
+                                      color: _isGameOver
+                                          ? Colors.redAccent
+                                          : Colors.cyanAccent,
+                                      shadows: [
+                                        BoxShadow(
+                                          color: _isGameOver
+                                              ? Colors.red
+                                              : Colors.cyan,
+                                          blurRadius: 20,
+                                          spreadRadius: 5,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                  .animate(
+                                    onPlay: (c) => c.repeat(reverse: true),
+                                  )
+                                  .scaleXY(end: 1.05, duration: 1.seconds),
+                              const SizedBox(height: 20),
+                              if (_isGameOver)
+                                Text(
+                                  "FINAL SCORE: $_score",
+                                  style: GoogleFonts.jetBrainsMono(
+                                    color: Colors.white70,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              const SizedBox(height: 40),
+                              Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 16,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "PRESS SPACE OR TAP",
+                                      style: GoogleFonts.orbitron(
+                                        color: Colors.white,
+                                        letterSpacing: 2,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  )
+                                  .animate(onPlay: (c) => c.repeat())
+                                  .fadeIn(duration: 500.ms)
+                                  .fadeOut(delay: 500.ms),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
+  // ... (Player Widget same)
   Widget _buildPlayer() {
     return Container(
       width: 40,
-      height: 50,
+      height: 40,
       decoration: BoxDecoration(
-        color: const Color(0xFF02569B), // Flutter blue
-        borderRadius: BorderRadius.circular(4),
+        color: Colors.transparent,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF02569B).withOpacity(0.5),
-            blurRadius: 10,
+            color: Colors.cyanAccent.withValues(alpha: 0.6),
+            blurRadius: 15,
           ),
         ],
       ),
-      child: const Icon(Icons.flutter_dash, color: Colors.white, size: 30),
+      child: Stack(
+        children: [
+          Transform.rotate(
+            angle: -0.1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.cyanAccent,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 8,
+            top: 8,
+            child: Container(width: 4, height: 4, color: Colors.black),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildObstacle(Obstacle obstacle) {
-    IconData icon;
-    Color color;
-
-    switch (obstacle.type) {
-      case 0: // Cactus (bug)
-        icon = Icons.bug_report;
-        color = Colors.red;
-        break;
-      case 1: // Bird (cloud)
-        icon = Icons.cloud;
-        color = Colors.grey;
-        break;
-      case 2: // Double cactus (warning)
-        icon = Icons.warning;
-        color = Colors.orange;
-        break;
-      default:
-        icon = Icons.bug_report;
-        color = Colors.red;
+    // Flying drones get a different look
+    if (obstacle.isFlying) {
+      return Container(
+        width: obstacle.width,
+        height: obstacle.height,
+        decoration: BoxDecoration(
+          color: Colors.redAccent.withValues(alpha: 0.8),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.redAccent.withValues(alpha: 0.5),
+              blurRadius: 15,
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Icon(Icons.adb_rounded, size: 20, color: Colors.white),
+        ),
+      );
     }
 
+    Color color = obstacle.type == 0
+        ? Colors.purpleAccent
+        : (obstacle.type == 1 ? Colors.pinkAccent : Colors.orangeAccent);
+
     return Container(
-      width: 40,
+      width: obstacle.width,
       height: obstacle.height,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(4),
-        boxShadow: [BoxShadow(color: color.withOpacity(0.3), blurRadius: 8)],
+        color: Colors.transparent,
+        border: Border.all(color: color, width: 2),
+        boxShadow: [
+          BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 10),
+        ],
       ),
-      child: Icon(icon, color: Colors.white, size: 30),
+      child: Center(
+        child: Container(
+          width: obstacle.width * 0.6,
+          height: obstacle.height * 0.6,
+          color: color.withValues(alpha: 0.5),
+        ),
+      ),
     );
   }
 }
@@ -395,6 +646,74 @@ class Obstacle {
   double x;
   final int type;
   final double height;
+  final double width;
+  final bool isFlying;
 
-  Obstacle({required this.x, required this.type, required this.height});
+  Obstacle({
+    required this.x,
+    required this.type,
+    required this.height,
+    required this.width,
+    this.isFlying = false,
+  });
+}
+
+class Particle {
+  double x;
+  double y;
+  final Color color;
+  double vx;
+  double vy;
+  double life = 1.0;
+  final double size;
+
+  Particle({
+    required this.x,
+    required this.y,
+    required this.color,
+    required this.vx,
+    required this.vy,
+    required this.size,
+  });
+
+  void update() {
+    x += vx;
+    y += vy;
+    vy += 0.5; // Gravity
+    life -= 0.05;
+  }
+}
+
+// Optimized Painter: Reuses paint objects where possible
+class OptimizedGridPainter extends CustomPainter {
+  final double offset;
+  // Cache paint object
+  static final Paint _paint = Paint()
+    ..color = Colors.cyanAccent.withValues(alpha: 0.1)
+    ..strokeWidth = 1.0;
+
+  OptimizedGridPainter({required this.offset});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double spacing = 40.0;
+
+    // Vertical lines moving
+    for (double i = offset % spacing; i < size.width; i += spacing) {
+      canvas.drawLine(
+        Offset(i, size.height),
+        Offset(i + (size.width / 2 - i) * 0.5, size.height * 0.4),
+        _paint,
+      );
+    }
+
+    // Horizontal lines fixed
+    for (double i = size.height; i > size.height * 0.4; i -= spacing * 0.5) {
+      canvas.drawLine(Offset(0, i), Offset(size.width, i), _paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(OptimizedGridPainter oldDelegate) =>
+      oldDelegate.offset != offset;
 }

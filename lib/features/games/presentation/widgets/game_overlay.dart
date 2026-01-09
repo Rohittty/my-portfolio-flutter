@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
 import 'package:my_portfolio/features/games/presentation/widgets/dino_runner_game.dart';
-import 'package:my_portfolio/features/games/presentation/widgets/code_builder_game.dart';
 
 class GameOverlay extends StatefulWidget {
   const GameOverlay({super.key});
@@ -70,42 +69,9 @@ class _GameOverlayState extends State<GameOverlay> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(24),
-                          child: DefaultTabController(
-                            length: 2,
-                            child: Column(
-                              children: [
-                                Container(
-                                  color: AppTheme.darkBackground,
-                                  child: TabBar(
-                                    tabs: const [
-                                      Tab(
-                                        icon: Icon(Icons.directions_run),
-                                        text: "Dino Runner",
-                                      ),
-                                      Tab(
-                                        icon: Icon(Icons.code),
-                                        text: "Code Builder",
-                                      ),
-                                    ],
-                                    labelColor: AppTheme.neonAccent,
-                                    unselectedLabelColor: Colors.white54,
-                                    indicatorColor: AppTheme.neonAccent,
-                                    labelStyle: GoogleFonts.jetBrainsMono(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                                const Expanded(
-                                  child: TabBarView(
-                                    children: [
-                                      DinoRunnerGame(),
-                                      CodeBuilderGame(),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: const DinoRunnerGame(),
                           ),
                         ),
                       ),
