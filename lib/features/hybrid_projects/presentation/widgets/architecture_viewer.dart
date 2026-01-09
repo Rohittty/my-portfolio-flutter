@@ -75,8 +75,12 @@ resource "aws_db_instance" "default" {
                     Switch(
                       value: _showCode,
                       onChanged: (val) => setState(() => _showCode = val),
-                      activeColor: AppTheme.devOpsPrimary,
-                      inactiveThumbColor: AppTheme.flutterPrimary,
+                      thumbColor: WidgetStateProperty.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return AppTheme.devOpsPrimary;
+                        }
+                        return AppTheme.flutterPrimary;
+                      }),
                       inactiveTrackColor: Colors.white10,
                     ),
                     Text(

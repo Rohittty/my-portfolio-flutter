@@ -77,7 +77,7 @@ class _TimelineItem extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.black, width: 2),
                 boxShadow: [
-                  BoxShadow(color: color.withOpacity(0.5), blurRadius: 6),
+                  BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 6),
                 ],
               ),
             ),

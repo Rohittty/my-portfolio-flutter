@@ -89,7 +89,7 @@ class _FooterSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "© 2026 Rohit Advani. Built with ",
+                "© 2026 Rohit Adwani. Built with ",
                 style: TextStyle(color: Colors.white38),
               ),
               Icon(Icons.favorite, size: 14, color: Colors.blueAccent),

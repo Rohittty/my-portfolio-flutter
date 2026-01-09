@@ -57,7 +57,7 @@ class _PackageCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppTheme.flutterPrimary.withOpacity(0.1),
+              color: AppTheme.flutterPrimary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(

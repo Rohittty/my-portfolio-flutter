@@ -127,7 +127,7 @@ class _TiltCardState extends State<_TiltCard>
             border: Border.all(color: Colors.grey.shade800, width: 8),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withOpacity(0.3),
+                color: widget.color.withValues(alpha: 0.3),
                 blurRadius: 30,
                 offset: const Offset(0, 20),
               ),
@@ -144,7 +144,7 @@ class _TiltCardState extends State<_TiltCard>
                     children: [
                       Container(
                         height: 120,
-                        color: widget.color.withOpacity(0.1),
+                        color: widget.color.withValues(alpha: 0.1),
                         alignment: Alignment.center,
                         child: Icon(widget.icon, size: 48, color: widget.color),
                       ),
