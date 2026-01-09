@@ -16,7 +16,7 @@ class AboutMeScreen extends StatelessWidget {
         backgroundColor: AppTheme.darkBackground,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
