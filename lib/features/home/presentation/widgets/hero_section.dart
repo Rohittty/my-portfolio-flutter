@@ -13,25 +13,8 @@ class HeroSection extends StatefulWidget {
   State<HeroSection> createState() => _HeroSectionState();
 }
 
-class _HeroSectionState extends State<HeroSection>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _HeroSectionState extends State<HeroSection> {
   Offset _mousePos = Offset.zero;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 20),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +24,13 @@ class _HeroSectionState extends State<HeroSection>
 
     return MouseRegion(
       onHover: (event) {
-        setState(() {
-          _mousePos = (event.position - center) / center.dy;
-        });
+        final newPos = (event.position - center) / center.dy;
+        // Throttle mouse updates to avoid excessive rebuilds
+        if ((newPos - _mousePos).distance > 0.02) {
+          setState(() {
+            _mousePos = newPos;
+          });
+        }
       },
       child: Container(
         height: 900, // Taller hero section
@@ -62,7 +49,7 @@ class _HeroSectionState extends State<HeroSection>
             // Layer 1: Animated Grid (Deepest)
             Positioned.fill(
               child: CustomPaint(
-                painter: _ArchitectGridPainter(_controller, _mousePos),
+                painter: _ArchitectGridPainter(_mousePos),
               ),
             ),
 
@@ -430,11 +417,9 @@ class _SocialButton extends StatelessWidget {
 }
 
 class _ArchitectGridPainter extends CustomPainter {
-  final AnimationController controller;
   final Offset mousePos;
 
-  _ArchitectGridPainter(this.controller, this.mousePos)
-    : super(repaint: controller);
+  _ArchitectGridPainter(this.mousePos);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -468,5 +453,7 @@ class _ArchitectGridPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _ArchitectGridPainter oldDelegate) => true;
+  bool shouldRepaint(covariant _ArchitectGridPainter oldDelegate) {
+    return (oldDelegate.mousePos - mousePos).distance > 0.001;
+  }
 }

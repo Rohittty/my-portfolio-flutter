@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
 
@@ -17,6 +18,21 @@ class ProjectDetailScreen extends StatefulWidget {
 
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   int _currentImageIndex = 0;
+
+  // Optional Play Store links keyed by projectId (add more as needed)
+  final Map<String, String> _playStoreLinks = {
+    'taxhelpdesk': 'https://play.google.com/store/apps/details?id=com.taxhelpdesk.me',
+    'isomeds': 'https://play.google.com/store/apps/details?id=com.example.isomeds',
+    'bbnia': 'https://play.google.com/store/apps/details?id=com.example.bbnia',
+  };
+
+  Future<void> _openUrl(BuildContext context, String url) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      messenger.showSnackBar(const SnackBar(content: Text('Could not open link')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,110 +220,47 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                   // Gallery
                   Text("PROJECT GALLERY", style: _headerStyle),
                   const Gap(24),
-
-                  // Image Carousel
-                  Container(
-                    height: 400,
-                    decoration: BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: color.withValues(alpha: 0.3),
-                        width: 2,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.image,
-                                size: 80,
-                                color: color.withValues(alpha: 0.3),
+                  // Image Carousel (simplified attractive card carousel)
+                  SizedBox(
+                    height: 360,
+                    child: PageView.builder(
+                      itemCount: images.length,
+                      controller: PageController(viewportFraction: 0.8),
+                      onPageChanged: (i) => setState(() => _currentImageIndex = i),
+                      itemBuilder: (context, i) {
+                        return Transform.scale(
+                          scale: i == _currentImageIndex ? 1.0 : 0.95,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [color.withValues(alpha: 0.15), Colors.black12],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                              const Gap(16),
-                              Text(
-                                images[_currentImageIndex],
-                                style: GoogleFonts.jetBrainsMono(
-                                  color: Colors.white54,
-                                  fontSize: 18,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.image, size: 64, color: color.withValues(alpha: 0.3)),
+                                const Gap(12),
+                                Text(images[i], style: GoogleFonts.jetBrainsMono(color: Colors.white70)),
+                                const Gap(16),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  child: Text(
+                                    'A quick snapshot of the app UI and flows for ${title}.',
+                                    style: GoogleFonts.inter(color: Colors.white54),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Navigation Arrows
-                        if (images.length > 1) ...[
-                          Positioned(
-                            left: 16,
-                            top: 0,
-                            bottom: 0,
-                            child: Center(
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _currentImageIndex =
-                                        (_currentImageIndex - 1) %
-                                        images.length;
-                                  });
-                                },
-                              ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            right: 16,
-                            top: 0,
-                            bottom: 0,
-                            child: Center(
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _currentImageIndex =
-                                        (_currentImageIndex + 1) %
-                                        images.length;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-
-                        // Indicators
-                        Positioned(
-                          bottom: 16,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(images.length, (index) {
-                              return Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                ),
-                                width: _currentImageIndex == index ? 24 : 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: _currentImageIndex == index
-                                      ? color
-                                      : Colors.white30,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ).animate(key: ValueKey(index)).fadeIn();
-                            }),
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
 
@@ -324,11 +277,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(18),
                           ),
                         ),
                       ),
-                      const Gap(16),
+                      const Gap(12),
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () {},
@@ -337,10 +290,24 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: color,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(18),
                           ),
                         ),
                       ),
+                      const Gap(12),
+                      if (_playStoreLinks.containsKey(widget.projectId))
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _openUrl(context, _playStoreLinks[widget.projectId]!),
+                            icon: const Icon(Icons.shop),
+                            label: const Text('PLAY STORE'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.neonAccent,
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.all(18),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ],

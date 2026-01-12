@@ -4,6 +4,9 @@ import 'package:my_portfolio/core/widgets/main_layout.dart';
 import 'package:my_portfolio/features/home/presentation/pages/home_screen.dart';
 import 'package:my_portfolio/features/devops_projects/presentation/pages/devops_projects_screen.dart';
 import 'package:my_portfolio/features/flutter_showcase/presentation/pages/flutter_showcase_screen.dart';
+import 'package:my_portfolio/features/flutter_showcase/presentation/pages/tax_help_detail_screen.dart';
+import 'package:my_portfolio/features/flutter_showcase/presentation/pages/isomeds_detail_screen.dart';
+import 'package:my_portfolio/features/flutter_showcase/presentation/pages/bbnia_detail_screen.dart';
 import 'package:my_portfolio/features/hybrid_projects/presentation/pages/hybrid_projects_screen.dart';
 import 'package:my_portfolio/features/about/presentation/pages/about_me_screen.dart';
 import 'package:my_portfolio/features/contact/presentation/pages/contact_screen.dart';
@@ -29,6 +32,18 @@ class AppRouter {
           GoRoute(
             path: AppConstants.routeFlutter,
             builder: (context, state) => const FlutterShowcaseScreen(),
+          ),
+          GoRoute(
+            path: '/flutter/tax-help',
+            builder: (context, state) => const TaxHelpDetailScreen(),
+          ),
+          GoRoute(
+            path: '/flutter/isomeds',
+            builder: (context, state) => const IsomedsDetailScreen(),
+          ),
+          GoRoute(
+            path: '/flutter/bbnia',
+            builder: (context, state) => const BbniaDetailScreen(),
           ),
           GoRoute(
             path: AppConstants.routeHybrid,

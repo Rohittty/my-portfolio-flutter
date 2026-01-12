@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
 
 class AppGallery extends StatelessWidget {
   const AppGallery({super.key});
@@ -13,23 +14,32 @@ class AppGallery extends StatelessWidget {
       runSpacing: 32,
       alignment: WrapAlignment.center,
       children: [
-        _TiltCard(
-          appName: "TaxHelpDesk",
-          description: "CA Services & Tools",
-          color: Colors.blueAccent,
-          icon: Icons.calculate,
+        GestureDetector(
+          onTap: () => context.go('/flutter/tax-help'),
+          child: _TiltCard(
+            appName: "TaxHelpDesk",
+            description: "CA Services & Tools",
+            color: Colors.blueAccent,
+            icon: Icons.calculate,
+          ),
         ),
-        _TiltCard(
-          appName: "Isomeds",
-          description: "E-commerce Medicine",
-          color: Colors.greenAccent,
-          icon: Icons.medical_services,
+        GestureDetector(
+          onTap: () => context.go('/flutter/isomeds'),
+          child: _TiltCard(
+            appName: "Isomeds",
+            description: "E-commerce Medicine",
+            color: Colors.greenAccent,
+            icon: Icons.medical_services,
+          ),
         ),
-        _TiltCard(
-          appName: "BBNIA",
-          description: "Resume Builder Platform",
-          color: Colors.purpleAccent,
-          icon: Icons.description,
+        GestureDetector(
+          onTap: () => context.go('/flutter/bbnia'),
+          child: _TiltCard(
+            appName: "BBNIA",
+            description: "Resume Builder Platform",
+            color: Colors.purpleAccent,
+            icon: Icons.description,
+          ),
         ),
       ],
     );
