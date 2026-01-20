@@ -95,11 +95,7 @@ class FeaturedProjects extends StatelessWidget {
                         data: entry.value,
                         index: entry.key,
                         onNavigate: () {
-                          final id = entry.value.title.toLowerCase().replaceAll(
-                            ' ',
-                            '-',
-                          );
-                          context.push('/project/devops-$id');
+                          context.push(entry.value.route!);
                         },
                       ),
                     ),
