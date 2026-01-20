@@ -2,24 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:my_portfolio/theme/app_theme.dart';
 
-class BbniaDetailScreen extends StatelessWidget {
-  const BbniaDetailScreen({super.key});
-
-  static const _playStoreUrl =
-      'https://play.google.com/store/apps/details?id=com.example.bbnia';
-
-  Future<void> _openPlayStore(BuildContext context) async {
-    final uri = Uri.parse(_playStoreUrl);
-    final messenger = ScaffoldMessenger.of(context);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Could not open Play Store')),
-      );
-    }
-  }
+class FactoryDetailScreen extends StatelessWidget {
+  const FactoryDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +14,7 @@ class BbniaDetailScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('BBNIA', style: GoogleFonts.outfit()),
+        title: Text('Factory Management', style: GoogleFonts.outfit()),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -48,13 +34,13 @@ class BbniaDetailScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppTheme.flutterPrimary.withValues(alpha: 0.06),
+                        AppTheme.devOpsPrimary.withValues(alpha: 0.12),
                         Colors.transparent,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppTheme.flutterPrimary.withValues(alpha: 0.12),
+                      color: AppTheme.devOpsPrimary.withValues(alpha: 0.18),
                     ),
                   ),
                   child: isMobile
@@ -66,11 +52,11 @@ class BbniaDetailScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: AppTheme.flutterPrimary,
+                                    color: AppTheme.devOpsPrimary,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: const Icon(
-                                    Icons.description,
+                                    Icons.factory,
                                     size: 32,
                                     color: Colors.white,
                                   ),
@@ -78,7 +64,7 @@ class BbniaDetailScreen extends StatelessWidget {
                                 const Gap(16),
                                 Expanded(
                                   child: Text(
-                                    'BBNIA',
+                                    'Factory Management System',
                                     style: GoogleFonts.outfit(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
@@ -90,22 +76,9 @@ class BbniaDetailScreen extends StatelessWidget {
                             ),
                             const Gap(16),
                             Text(
-                              'Create professional resumes on mobile with live PDF preview and export.',
+                              'End-to-end industrial automation and inventory tracking system.',
                               style: GoogleFonts.inter(color: Colors.white70),
                             ).animate().fadeIn(delay: 200.ms),
-                            const Gap(24),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () => _openPlayStore(context),
-                                icon: const Icon(Icons.shop),
-                                label: const Text('Open'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.neonAccent,
-                                  foregroundColor: Colors.black,
-                                ),
-                              ).animate().fadeIn(delay: 300.ms),
-                            ),
                           ],
                         )
                       : Row(
@@ -113,11 +86,11 @@ class BbniaDetailScreen extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: AppTheme.flutterPrimary,
+                                color: AppTheme.devOpsPrimary,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
-                                Icons.description,
+                                Icons.factory,
                                 size: 32,
                                 color: Colors.white,
                               ),
@@ -128,7 +101,7 @@ class BbniaDetailScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'BBNIA',
+                                    'Factory Management System',
                                     style: GoogleFonts.outfit(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
@@ -137,7 +110,7 @@ class BbniaDetailScreen extends StatelessWidget {
                                   ).animate().fadeIn(delay: 100.ms),
                                   const Gap(6),
                                   Text(
-                                    'Create professional resumes on mobile with live PDF preview and export.',
+                                    'End-to-end industrial automation and inventory tracking system.',
                                     style: GoogleFonts.inter(
                                       color: Colors.white70,
                                     ),
@@ -145,20 +118,12 @@ class BbniaDetailScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            ElevatedButton.icon(
-                              onPressed: () => _openPlayStore(context),
-                              icon: const Icon(Icons.shop),
-                              label: const Text('Open'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppTheme.neonAccent,
-                                foregroundColor: Colors.black,
-                              ),
-                            ).animate().fadeIn(delay: 300.ms),
                           ],
                         ),
                 ),
                 const Gap(20),
                 const Gap(18),
+                // Quick bullets
                 Flex(
                   direction: isMobile ? Axis.vertical : Axis.horizontal,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +140,7 @@ class BbniaDetailScreen extends StatelessWidget {
                           ),
                           const Gap(6),
                           Text(
-                            'Full-stack Mobile Developer',
+                            'Full Stack Engineer',
                             style: GoogleFonts.inter(color: Colors.white70),
                           ),
                           const Gap(12),
@@ -187,9 +152,9 @@ class BbniaDetailScreen extends StatelessWidget {
                           ),
                           const Gap(6),
                           _bulleted([
-                            'Template-driven PDF export',
-                            'Cloud sync',
-                            'One-tap share',
+                            'Real-time Inventory',
+                            'IoT Integration',
+                            'Automated Reporting',
                           ]),
                         ],
                       ),
@@ -199,8 +164,9 @@ class BbniaDetailScreen extends StatelessWidget {
                         runSpacing: 8,
                         children: [
                           _chip('Flutter'),
-                          _chip('PDF'),
-                          _chip('Firebase'),
+                          _chip('Node.js'),
+                          _chip('MongoDB'),
+                          _chip('IoT'),
                         ],
                       ).animate().fadeIn(delay: 200.ms),
                     ] else ...[
@@ -216,7 +182,7 @@ class BbniaDetailScreen extends StatelessWidget {
                             ),
                             const Gap(6),
                             Text(
-                              'Full-stack Mobile Developer',
+                              'Full Stack Engineer',
                               style: GoogleFonts.inter(color: Colors.white70),
                             ),
                             const Gap(12),
@@ -228,9 +194,9 @@ class BbniaDetailScreen extends StatelessWidget {
                             ),
                             const Gap(6),
                             _bulleted([
-                              'Template-driven PDF export',
-                              'Cloud sync',
-                              'One-tap share',
+                              'Real-time Inventory',
+                              'IoT Integration',
+                              'Automated Reporting',
                             ]),
                           ],
                         ),
@@ -241,8 +207,9 @@ class BbniaDetailScreen extends StatelessWidget {
                         runSpacing: 8,
                         children: [
                           _chip('Flutter'),
-                          _chip('PDF'),
-                          _chip('Firebase'),
+                          _chip('Node.js'),
+                          _chip('MongoDB'),
+                          _chip('IoT'),
                         ],
                       ).animate().fadeIn(delay: 200.ms),
                     ],
@@ -255,7 +222,7 @@ class BbniaDetailScreen extends StatelessWidget {
                 ),
                 const Gap(8),
                 Text(
-                  'Enable users to create professional resumes on mobile with accurate PDF rendering.',
+                  'Digitizing legacy factory operations to track inventory and machine status in real-time.',
                   style: GoogleFonts.inter(color: Colors.white70),
                 ),
                 const Gap(24),
@@ -265,15 +232,10 @@ class BbniaDetailScreen extends StatelessWidget {
                 ),
                 const Gap(8),
                 Text(
-                  'Implemented template-driven PDF generation and live preview; added export and cloud sync features.',
+                  'Developed a cross-platform Flutter app connected to IoT sensors and a Node.js backend for live dashboards and alerts.',
                   style: GoogleFonts.inter(color: Colors.white70),
                 ),
                 const Gap(32),
-                ElevatedButton.icon(
-                  onPressed: () => _openPlayStore(context),
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text('Open in Play Store'),
-                ),
               ],
             ),
           );
@@ -294,11 +256,7 @@ class BbniaDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 6.0),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.check_circle_outline,
-                    size: 12,
-                    color: AppTheme.flutterPrimary,
-                  ),
+                  Icon(Icons.circle, size: 8, color: AppTheme.neonAccent),
                   const Gap(8),
                   Expanded(
                     child: Text(

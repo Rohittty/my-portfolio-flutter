@@ -68,7 +68,9 @@ class HybridProjectsScreen extends StatelessWidget {
 
           // Content
           SliverPadding(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(
+              MediaQuery.of(context).size.width < 600 ? 16 : 32,
+            ),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // Case Studies Section
@@ -138,6 +140,19 @@ class HybridProjectsScreen extends StatelessWidget {
                           ],
                           color: Colors.orangeAccent,
                         ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1),
+                        const HybridProjectCard(
+                          title: "Factory Management System",
+                          description:
+                              "Industrial automation platform tracking inventory and machine status in real-time.",
+                          techStack: [
+                            "Flutter",
+                            "Node.js",
+                            "MongoDB",
+                            "IoT",
+                            "WebSocket",
+                          ],
+                          color: Colors.redAccent,
+                        ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
                       ],
                     );
                   },

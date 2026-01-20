@@ -48,9 +48,7 @@ class _HeroSectionState extends State<HeroSection> {
           children: [
             // Layer 1: Animated Grid (Deepest)
             Positioned.fill(
-              child: CustomPaint(
-                painter: _ArchitectGridPainter(_mousePos),
-              ),
+              child: CustomPaint(painter: _ArchitectGridPainter(_mousePos)),
             ),
 
             // Layer 2: Ambient Glows
@@ -166,7 +164,9 @@ class _HeroSectionState extends State<HeroSection> {
                               _GradientText(
                                 "Building Scalable Apps",
                                 style: GoogleFonts.outfit(
-                                  fontSize: isDesktop ? 72 : 48,
+                                  fontSize: isDesktop
+                                      ? 72
+                                      : (size.width > 600 ? 48 : 36),
                                   fontWeight: FontWeight.w900,
                                   height: 1.0,
                                   letterSpacing: -2,
@@ -180,7 +180,9 @@ class _HeroSectionState extends State<HeroSection> {
                               _GradientText(
                                 "from UI to Cloud",
                                 style: GoogleFonts.outfit(
-                                  fontSize: isDesktop ? 72 : 48,
+                                  fontSize: isDesktop
+                                      ? 72
+                                      : (size.width > 600 ? 48 : 36),
                                   fontWeight: FontWeight.w900,
                                   height: 1.0,
                                   letterSpacing: -2,
@@ -219,7 +221,7 @@ class _HeroSectionState extends State<HeroSection> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _PrimaryButton(
-                          onPressed: () {}, 
+                          onPressed: () {},
                           label: "View Work",
                           icon: Icons.arrow_downward_rounded,
                         ),
@@ -403,7 +405,7 @@ class _SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {}, 
+      onPressed: () {},
       tooltip: tooltip,
       icon: Icon(icon, color: Colors.white70, size: 24),
       style: IconButton.styleFrom(

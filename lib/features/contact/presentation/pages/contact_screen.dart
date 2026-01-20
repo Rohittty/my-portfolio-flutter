@@ -14,91 +14,100 @@ class ContactScreen extends StatelessWidget {
         title: const Text("Contact Node"),
         backgroundColor: AppTheme.darkBackground,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Text(
-                "> INITIALIZING_COMMUNICATION_PROTOCOL...",
-                style: GoogleFonts.jetBrainsMono(color: Colors.greenAccent),
-              ),
-            ),
-            const Gap(32),
-
-            // Terminal Form
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.greenAccent.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "\$ enter_credentials",
-                    style: GoogleFonts.jetBrainsMono(color: Colors.white54),
-                  ),
-                  const Gap(16),
-                  _TerminalField(label: "user.name"),
-                  const Gap(16),
-                  _TerminalField(label: "user.email"),
-                  const Gap(16),
-                  Text(
-                    "\$ enter_message",
-                    style: GoogleFonts.jetBrainsMono(color: Colors.white54),
-                  ),
-                  const Gap(16),
-                  _TerminalField(label: "message.body", maxLines: 5),
-                  const Gap(24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.greenAccent.withValues(alpha: 0.1),
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                      ),
-                      child: Text(
-                        "EXECUTE SEND()",
-                        style: GoogleFonts.jetBrainsMono(
-                          color: Colors.greenAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const Gap(48),
-
-            // Social Links
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 32,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 600;
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(isMobile ? 16 : 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _SocialLink(FontAwesomeIcons.github, "GitHub"),
-                _SocialLink(FontAwesomeIcons.linkedin, "LinkedIn"),
-                _SocialLink(FontAwesomeIcons.twitter, "Twitter"),
-                _SocialLink(Icons.email, "Email"),
+                Center(
+                  child: Text(
+                    "> INITIALIZING_COMMUNICATION_PROTOCOL...",
+                    style: GoogleFonts.jetBrainsMono(color: Colors.greenAccent),
+                  ),
+                ),
+                const Gap(32),
+
+                // Terminal Form
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.greenAccent.withValues(alpha: 0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.greenAccent.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "\$ enter_credentials",
+                        style: GoogleFonts.jetBrainsMono(color: Colors.white54),
+                      ),
+                      const Gap(16),
+                      _TerminalField(label: "user.name"),
+                      const Gap(16),
+                      _TerminalField(label: "user.email"),
+                      const Gap(16),
+                      Text(
+                        "\$ enter_message",
+                        style: GoogleFonts.jetBrainsMono(color: Colors.white54),
+                      ),
+                      const Gap(16),
+                      _TerminalField(label: "message.body", maxLines: 5),
+                      const Gap(24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.greenAccent.withValues(
+                              alpha: 0.1,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          child: Text(
+                            "EXECUTE SEND()",
+                            style: GoogleFonts.jetBrainsMono(
+                              color: Colors.greenAccent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Gap(48),
+
+                // Social Links
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 32,
+                  children: [
+                    _SocialLink(FontAwesomeIcons.github, "GitHub"),
+                    _SocialLink(FontAwesomeIcons.linkedin, "LinkedIn"),
+                    _SocialLink(FontAwesomeIcons.twitter, "Twitter"),
+                    _SocialLink(Icons.email, "Email"),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

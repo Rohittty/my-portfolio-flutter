@@ -156,7 +156,8 @@ class _SkillCardState extends State<_SkillCard> {
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: 200.ms,
-        width: 350,
+        width: double.infinity,
+        constraints: const BoxConstraints(maxWidth: 350),
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
           color: _isHovered

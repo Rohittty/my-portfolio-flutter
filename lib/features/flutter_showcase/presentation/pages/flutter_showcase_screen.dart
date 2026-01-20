@@ -72,7 +72,9 @@ class FlutterShowcaseScreen extends StatelessWidget {
 
           // Content
           SliverPadding(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(
+              MediaQuery.of(context).size.width < 600 ? 16 : 32,
+            ),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // Interactive Playground

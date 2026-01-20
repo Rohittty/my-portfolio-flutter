@@ -199,9 +199,8 @@ class _DevOpsProjectsScreenState extends ConsumerState<DevOpsProjectsScreen> {
 
               // Project Grid
               SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 0,
+                padding: EdgeInsets.all(
+                  MediaQuery.of(context).size.width < 600 ? 16 : 32,
                 ),
                 sliver: isDesktop || isTablet
                     ? SliverMasonryGrid.count(

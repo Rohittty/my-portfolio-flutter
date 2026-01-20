@@ -116,20 +116,21 @@ class _FooterSection extends StatelessWidget {
       child: Column(
         children: [
           // Social Links
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            alignment: WrapAlignment.center,
             children: [
               _SocialButton(icon: Icons.code, label: "GitHub", onTap: () {}),
-              const Gap(16),
               _SocialButton(icon: Icons.work, label: "LinkedIn", onTap: () {}),
-              const Gap(16),
               _SocialButton(icon: Icons.email, label: "Email", onTap: () {}),
             ],
           ),
           const Gap(32),
           // Copyright
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
                 "© 2026 Rohit Adwani • Built with ",
@@ -138,7 +139,10 @@ class _FooterSection extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
-              const Icon(Icons.favorite, size: 16, color: Colors.redAccent),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: Icon(Icons.favorite, size: 16, color: Colors.redAccent),
+              ),
               Text(
                 " & Flutter",
                 style: GoogleFonts.jetBrainsMono(

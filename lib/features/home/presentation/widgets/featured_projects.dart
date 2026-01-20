@@ -20,6 +20,7 @@ class FeaturedProjects extends StatelessWidget {
         flutterStats: "Appointment Booking • Calculators",
         icon: FontAwesomeIcons.calculator,
         tags: ["Flutter", "Firebase", "REST APIs", "AWS"],
+        route: '/flutter/tax-help',
       ),
       ProjectData(
         title: "Isomeds",
@@ -28,6 +29,7 @@ class FeaturedProjects extends StatelessWidget {
         flutterStats: "Cart Management • Home Delivery",
         icon: FontAwesomeIcons.capsules,
         tags: ["Flutter", "Dart", "Firebase", "E-commerce"],
+        route: '/flutter/isomeds',
       ),
       ProjectData(
         title: "BBNIA",
@@ -36,6 +38,16 @@ class FeaturedProjects extends StatelessWidget {
         flutterStats: "Resume Builder • Hiring Portal",
         icon: FontAwesomeIcons.fileContract,
         tags: ["Flutter", "REST APIs", "AWS", "Git"],
+        route: '/flutter/bbnia',
+      ),
+      ProjectData(
+        title: "Factory Management",
+        description: "Industrial automation & inventory tracking.",
+        devOpsStats: "IoT Integration",
+        flutterStats: "Real-time Dashboard",
+        icon: FontAwesomeIcons.industry,
+        tags: ["Flutter", "Node.js", "IoT", "MongoDB"],
+        route: '/project/factory-management',
       ),
     ];
 
@@ -134,10 +146,9 @@ class FeaturedProjects extends StatelessWidget {
                           data: entry.value,
                           index: entry.key,
                           onNavigate: () {
-                            final id = entry.value.title
-                                .toLowerCase()
-                                .replaceAll(' ', '-');
-                            context.push('/project/devops-$id');
+                            if (entry.value.route != null) {
+                              context.push(entry.value.route!);
+                            }
                           },
                         ),
                       ),
@@ -159,6 +170,7 @@ class ProjectData {
   final String flutterStats;
   final IconData icon;
   final List<String> tags;
+  final String? route;
 
   ProjectData({
     required this.title,
@@ -167,6 +179,7 @@ class ProjectData {
     required this.flutterStats,
     required this.icon,
     required this.tags,
+    this.route,
   });
 }
 

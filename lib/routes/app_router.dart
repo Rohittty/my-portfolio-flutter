@@ -8,6 +8,7 @@ import 'package:my_portfolio/features/flutter_showcase/presentation/pages/tax_he
 import 'package:my_portfolio/features/flutter_showcase/presentation/pages/isomeds_detail_screen.dart';
 import 'package:my_portfolio/features/flutter_showcase/presentation/pages/bbnia_detail_screen.dart';
 import 'package:my_portfolio/features/hybrid_projects/presentation/pages/hybrid_projects_screen.dart';
+import 'package:my_portfolio/features/hybrid_projects/presentation/pages/factory_detail_screen.dart';
 import 'package:my_portfolio/features/about/presentation/pages/about_me_screen.dart';
 import 'package:my_portfolio/features/contact/presentation/pages/contact_screen.dart';
 import 'package:my_portfolio/features/devops_projects/presentation/pages/project_detail_screen.dart';
@@ -59,6 +60,14 @@ class AppRouter {
           ),
 
           // Stacked Routes (Hide Shell if needed, or keep it)
+          GoRoute(
+            path: '/project/devops-:id',
+            builder: (context, state) => const DevOpsProjectsScreen(),
+          ),
+          GoRoute(
+            path: '/project/factory-management',
+            builder: (context, state) => const FactoryDetailScreen(),
+          ),
           GoRoute(
             path: '/project/:id',
             builder: (context, state) {
